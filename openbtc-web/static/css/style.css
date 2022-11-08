@@ -1,0 +1,120 @@
+
+
+body {
+	font-family: 'Lato', sans-serif;
+}
+
+h1 {
+	position: relative;
+	color: #6030b1;
+	font-weight: bold;
+}
+
+.section-heading {
+	color: #6030b1;
+	line-height: 1.25;
+	font-size:24px
+}
+
+label {
+	color: #242424;
+	font-size: 18px;
+	padding-left: 50px;
+}
+
+.long-input {
+	background-color: #f8f8f8;
+	border: 0;
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 75%;
+}
+
+.medium-input {
+	background-color: #f8f8f8;
+	border: 0;
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 50%;
+}
+
+.short-input {
+	background-color: #f8f8f8;
+	border: 0;
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 25%;
+}
+
+select {
+	background-color: #f8f8f8;
+	border: 0;
+	margin-left: 15px;
+	margin-right: 15px;
+	width: 25%;
+}
+
+.upload-btn {
+	background-color: #6030B1;
+	color: #fff;
+	font-size: 18px;
+	padding: 6px 30px;
+	border-radius: 16px;
+	border:0;
+	margin-left: 50px;
+	margin-right: 50px;
+}	
+
+.action-btn {
+	background-color: #6030B1;
+	color: #fff;
+	font-size: 18px;
+	padding: 6px 28px;
+	border-radius: none;
+	border: 0;
+}
+
+.copy-btn {
+	border: 0;
+	background: none;
+	padding: 0;
+	vertical-align: middle;
+}
+
+.notes {
+	background-color: #fff;
+	font-size: 16px;
+	font-style: italic;
+	width: 17%;
+	border: 0;
+}
+
+.notes-right {
+	float: right;
+	background-color: #fff;
+	font-size: 16px;
+	font-style: italic;
+	width: 34%;
+	border: 0;	
+}
+
+#include-ugl {
+	margin-left: 50px;
+}
+
+#cb-label {
+	padding-left: 0px;
+	margin-right: 50px;
+}
+
+.logo {
+	width: 400px;
+	height: 200px;
+}
+
+.copied {
+	font-style: italic;
+	font-size: 14px;
+	padding-left: 0px;
+}
+
