@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> Open Bitcoin </title>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	<link rel="icon" type="image/x-icon" href="/static/res/favicon-secondary.png">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+	<script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	
+	<nav>
+		<img src="{{ url_for('static', filename='res/logo.jpeg') }}" class="logo"/>
+	</nav>
+
+<div class="row">
+	<p class="section-heading"> Address Checker </p>
+	<form method="get" id="va-form">
+		<div class="ac-container">
+			<label for="va-address"> Address </label>
+			<input type="text" id="va-address" class="long-input"/>
+			<button type="submit" class="action-btn">Verify</button>
+		</div>
+		<div class="url-container">
+			<label for="va-address-url"> URL </label>
+			<input type="text" id="va-address-url" class="medium-input"/>
+			<button type="button" onclick="copyAddress()" class="copy-btn"><img src="{{ url_for('static', filename='res/copy.png') }}"/></button>
+			<label class="copied" id="address-copied"></label>
+		</div>
+	</form>
+	<p class="section-heading"> Transaction Verification </p>
+	<form method="get" id="vt-form">
+		<div class="txv-container">
+			<input type="file" id="file" name="file" hidden/>
+			<button type="button" id="upload-file" class="upload-btn">Upload File</button>
+			<label for="vt-tx-hash"> Transaction Hash </label>
+			<input type="text" id="vt-tx-hash" class="medium-input"/>
+			<button type="submit" class="action-btn">Verify</button>
+		</div>
+		<div class="bc-container">
+			<input type="text" id="upload-status" class="notes"/>
+			<label for="vt-tx-url" class="bc-label"> Blockchain Confirmation </label>
+			<input type="text" id="vt-tx-url" class="medium-input"/>
+			<button type="button" onclick="copyTx()" class="copy-btn"><img src="{{ url_for('static', filename='res/copy.png') }}"/></button>
+			<label class="copied" id="tx-copied"></label>
+		</div>
+	</form>
+	<p class="section-heading"> Sent/Received History </p>
+	<form method="get" id="gsr-form">
+		<div class="date-container">
+			<label for="sr-start-date"> Start Date </label>
+			<input type="date" id="sr-start-date" class="short-input"/>
+			<label for="sr-end-date"> End Date </label>
+			<input type="date" id="sr-end-date" class="short-input"/>
+		</div>
+		<div class="sr-container">
+			<label for="sr-address"> Address </label>
+			<input type="text" id="sr-address" class="long-input"/>
+			<button type="submit" class="action-btn">Genererate Excel</button>
+		</div>
+		<div class="pl-container">
+			<input type="checkbox" id="include-ugl">
+			<label for="include-ugl" id="cb-label"> Include unrealized gains or losses</label>
+			<input type="text" id="gen-sr-status" class="notes-right"/>
+		</div>
+	</form>
+	<p class="section-heading"> Historical Price Data </p>
+	<form method="get" id="ghp-form">
+		<div class="date-container">
+			<label for="history-start-date"> Start Date </label>
+			<input type="date" id="history-start-date" class="short-input"/>
+			<label for="history-end_date"> End Date </label>
+			<input type="date" id="history-end-date" class="short-input"/>
+			<button type="submit" class="action-btn" id="generate-history">Genererate Excel</button>
+		</div>
+		<div class="last-btn">
+			<label for="markets"> Select Exchange </label>
+			<select name="markets" id="markets">
+				<option value="kraken">Kraken</option>
+				<option value="gemini">Gemini</option>
+				<option value="bitfinex">Bitfinex</option>
+				<option value="binance-us">Binance-us</option>
+				<option value="coinbase-pro">Coinbase-pro</option>
+			</select>
+			<input type="text" id="gen-hp-status" class="notes-right"/>
+		</div>
+		
+	</form>
+</div>
+
+	<footer>
+		<div class="row footer__row">
+		  <a href="#" class="footer__anchor">
+			<figure class="footer__logo">
+			  <img src="/static/res/open-bitcoin-secondary.png" class="footer__logo--img" alt="">
+			</figure>
+			<span class="footer__logo--popper">
+			  Top
+			  <i class="fas fa-arrow-up"></i>
+			</span>
+		  </a>
+		  <div class="footer__social--list">
+			<a href="https://google.com" target="_blank" class="
+			  footer__social--link
+			  link__hover-effect
+			  link__hover-effect--white
+			" target="_blank">About</a>
+			<a href="https://normaescobar.com" target="_blank" class="
+			  footer__social--link
+			  link__hover-effect
+			  link__hover-effect--white
+			" target="_blank">Developer</a>
+			<a href="mailto:norma@normaescobar.com" target="_blank" class="
+			  footer__social--link
+			  link__hover-effect
+			  link__hover-effect--white
+			" target="_blank">Contact</a>
+			<a href="/static/res/Documentation.pdf" target="_blank" class="
+			  footer__social--link
+			  link__hover-effect
+			  link__hover-effect--white
+			" target="_blank">Documentation</a>
+		  </div>
+		  <div class="footer__copyright">Copyright © 2022 Open Bitcoin</div>
+		</div>
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+	$(document).ready(() => {
+		$.ajax({ 
+			url: "/init",
+			context: document.body
+		});
+	});	
+	
+	$(document).on('submit', '#gsr-form', (e) => {
+		e.preventDefault();
+		$('#gen-sr-status').val('Retrieving Transactions...');
+		let startDate = (new Date($("#sr-start-date").val())).getTime()/1000;
+		let endDate = (new Date($("#sr-end-date").val())).getTime()/1000;
+		let address = $('#sr-address').val();
+		$.ajax({
+			type:'GET',
+			url:'/sentReceived',
+			data:{
+				start_date: startDate,
+				end_date: endDate,
+				include_ugl:$('#include-ugl').is(":checked") ? 1 : 0,
+				address: address
+			},
+			success:() => {
+				window.location.replace(`/download-srh/BTC_${address}.xlsx`);
+				$('#gen-sr-status').val('Transactions retrieved successfully');
+			},
+			error: () => {
+				$('#gen-sr-status').val('Retrieval of Sent/Received History failed');
+			}
+		})
+	});
+	
+	$(document).on('submit', '#ghp-form', (e) => {
+		e.preventDefault();
+		$('#gen-hp-status').val('Retrieving BTC historical price data...');
+		let startDate = (new Date($("#history-start-date").val())).getTime()/1000;
+		let endDate = (new Date($("#history-end-date").val())).getTime()/1000;
+		$.ajax({
+			type:'GET',
+			url:'/priceHistory',
+			data:{
+				before: endDate,
+				after: startDate,
+				market:$("#markets").val()
+			},
+			success:() => {
+				window.location.replace(`/download-hpd/BTC_price_history_${startDate}-${endDate}.xlsx`);
+				$('#gen-hp-status').val('BTC historical price data retrieved successfully');
+			},
+			error: () => {
+				$('#gen-hp-status').val('Retrieval of BTC historical price data failed');
+			}
+		})
+	});
+	
+	$(document).on('submit', '#va-form', (e) => {
+		e.preventDefault();
+		$("#address-copied").text('');
+		$('#va-address-url').val('Validating Address...');
+		$.ajax({
+			type:'GET',
+			url:'/verifyaddress',
+			data:{
+				address:$("#va-address").val()
+			},
+			success:() => {
+				$('#va-address-url').val(`https://mempool.space/address/${$('#va-address').val()}`);
+			},
+			error: () => {
+				$('#va-address-url').val('Invalid Address');
+			}
+		})
+	});
+	
+	$(document).on('submit', '#vt-form', (e) => {
+		e.preventDefault();
+		$("#tx-copied").text('');
+		$('#vt-tx-url').val('Validating Transaction...');
+		$.ajax({
+			type:'GET',
+			url:'/verifytx',
+			data:{
+				tx_hash:$("#vt-tx-hash").val()
+			},
+			success:() => {
+				$('#vt-tx-url').val(`https://mempool.space/tx/${$('#vt-tx-hash').val()}`);
+			},
+			error: () => {
+				$('#vt-tx-url').val('Invalid Transaction');
+			}
+		})
+	});
+	
+	$(document).on('click', '#upload-file', (e) => {
+		$('#file').click();
+	});
+	
+	$('#file').change(()=> {
+		let files = $('#file')[0].files;
+		if (files.length){
+			$('#upload-status').val('Verifying Transactions');
+			let file = files[0];
+			let formData = new FormData();
+			formData.append('file', file);
+			$.ajax({
+				type:'POST',
+				url:'/upload',
+				processData: false,
+				contentType: false,
+				data: formData,
+				success: () => {
+					$('#upload-status').val('Transactions Verified');
+					window.location.replace(`/download-vtx/${$('#file').val().split(/(\\|\/)/).pop()}`);
+					$('#file').val('');
+				},
+				error: () => {
+					$('#upload-status').val('Transactions Verification Failed');
+					$('#file').val('');
+				}
+			});
+		}
+	});
+
+	function copyAddress(){
+		navigator.clipboard.writeText($('#va-address-url').val());
+		$("#address-copied").text('copied to clipboard');
+	}
+	
+	function copyTx(){
+		navigator.clipboard.writeText($('#vt-tx-url').val());
+		$("#tx-copied").text('copied to clipboard');
+	}
+	</script>
+</body>
+</html>
